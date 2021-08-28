@@ -7,6 +7,7 @@
 Pre-trained DPR Model.
 """
 import gzip
+import shutil
 import os
 import os.path
 
@@ -23,13 +24,18 @@ def download(datapath):
     new_file = os.path.join(dpath, fname.replace('.gz', ''))
     version = 'v1.0'
     if not built(dpath, version):
-        os.makedirs(dpath)
+        os.makedirs(dpath, exist_ok=True)
         download_path(path, dpath, fname)
-        input = gzip.GzipFile(gzip_file, "rb")
-        s = input.read()
-        input.close()
-        output = open(new_file, "wb")
-        output.write(s)
-        output.close()
+
+        with gzip.open(gzip_file, 'rb') as f_in:
+            with open(new_file, 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+
+        #input = gzip.GzipFile(gzip_file, "rb")
+        #s = input.read()
+        #input.close()
+        #output = open(new_file, "wb")
+        #output.write(s)
+        #output.close()
         logger.info(f" Saved to {new_file}")
         mark_done(dpath, version)

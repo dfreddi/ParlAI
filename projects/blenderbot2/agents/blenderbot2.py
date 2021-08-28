@@ -875,6 +875,12 @@ class BlenderBot2RagAgent(RagAgent):
             return loss
 
 
+def make_hook(tensor_name):
+    def hook(grad):
+        print(f"calculated grad for {tensor_name}")
+    return hook
+
+
 class BlenderBot2FidAgent(FidAgent, BlenderBot2RagAgent):
     model: BlenderBot2FidModel
 
@@ -887,4 +893,11 @@ class BlenderBot2FidAgent(FidAgent, BlenderBot2RagAgent):
             self._copy_embeddings(
                 model.encoder.embeddings.weight, self.opt['embedding_type']
             )
+
+        print("REGISTERING HOOKS ON TENSORS")
+        for name, param in model.named_parameters():
+            if param.requires_grad:
+                print(f"hook registered for {name}")
+                param.register_hook(make_hook(name))
+
         return model
