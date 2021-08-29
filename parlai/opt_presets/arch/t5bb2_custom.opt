@@ -1,0 +1,16 @@
+{
+"activation": "gelu",
+"attention_dropout": 0.0,
+"dict_file": "zoo:blenderbot2/blenderbot2_400M/model.dict",
+"dropout": 0.1,
+"embedding_size": 1024,
+"embeddings_scale": false,
+"ffn_size": 1024,
+"force_fp16_tokens": true,
+"fp16": true,
+"learn_positional_embeddings": true,
+"n_decoder_layers": 4,
+"n_encoder_layers": 4,
+"n_heads": 4,
+"n_positions": 1024
+}
